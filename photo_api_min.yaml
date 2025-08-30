@@ -1,0 +1,66 @@
+
+openapi: 3.1.0
+info:
+  title: Private Photo Catalog API
+  version: "1.0.0"
+servers:
+  - url: https://YOUR-DOMAIN-OR-WORKER
+paths:
+  /search:
+    get:
+      summary: Search images by photographer, free text, vibe, composition, place, subject, color family, and orientation.
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+          description: Free text to match photographer or filename.
+        - in: query
+          name: photographer
+          schema: { type: string }
+        - in: query
+          name: vibe
+          schema: { type: string }
+        - in: query
+          name: composition
+          schema: { type: string }
+        - in: query
+          name: place
+          schema: { type: string }
+        - in: query
+          name: subject
+          schema: { type: string }
+        - in: query
+          name: color
+          schema: { type: string }
+          description: Color family (blue, green, etc.).
+        - in: query
+          name: orientation
+          schema: { type: string, enum: [landscape, portrait, square] }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 24, minimum: 1, maximum: 100 }
+      responses:
+        "200":
+          description: Results from the catalog.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        photographer: { type: string }
+                        filename: { type: string }
+                        url: { type: string, format: uri }
+                        width: { type: integer }
+                        height: { type: integer }
+                        orientation: { type: string }
+                        color_family: { type: string }
+                        dominant_color: { type: string }
+                        vibe: { type: string, nullable: true }
+                        composition: { type: string, nullable: true }
+                        place: { type: string, nullable: true }
+                        subject: { type: string, nullable: true }
